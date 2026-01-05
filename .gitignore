@@ -1,0 +1,9 @@
+__pycache__/
+*.pt
+*.bin
+*.ckpt
+*.log
+.env
+data/
+results/
+wandb/
