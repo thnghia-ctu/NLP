@@ -3,3 +3,4 @@ pyyaml
 transformers
 peft
 accelerate
+rouge-score

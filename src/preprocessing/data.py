@@ -4,10 +4,11 @@ from dataclasses import dataclass
 class ArticleSample:
     id: str
     text: str
-    summary: str
+    summary: list
     labels: list
     sections: list
     section_names: list
+    pred_summary: str
 
 def parse_item(item):
     return ArticleSample(
@@ -16,7 +17,8 @@ def parse_item(item):
         summary=item["abstract_text"],
         labels=item["labels"],
         sections=item["sections"],
-        section_names=item["section_names"]
+        section_names=item["section_names"],
+        pred_summary=''
     )
 
 @dataclass
