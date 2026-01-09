@@ -21,6 +21,14 @@ def main():
     # 4. Chuyển sang PTSSample
     pts_samples = [json_to_sample(d) for d in pts_dicts]
 
+    for pts in pts_samples:
+        if(len(pts.target)>0 ):
+            print(pts.source)
+            print('---------------------------------------------------------------------')
+            print('---------------------------------------------------------------------')
+            print(pts.target)
+            break
+
     # 5. Tóm tắt từng section
     pred_sections = []
     for s in pts_samples:

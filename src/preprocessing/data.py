@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from src.preprocessing.preprocess import split_sentences, align_abstract_to_sections
+from src.preprocessing.preprocess import split_sentences, align_abstract_to_sections, chunk_sentences
 
 @dataclass
 class ArticleSample:
@@ -28,7 +28,7 @@ class PTSSample:
     section_name: str
     section_idx: int
     source: str
-    target: str
+    target: list
 
 def json_to_sample(j):
     return PTSSample(
@@ -40,25 +40,24 @@ def json_to_sample(j):
     )
 
 def build_pts_samples(article: ArticleSample):
-    sections = [
-        " ".join(s) if isinstance(s, list) else s
-        for s in article.sections
-    ] 
+    sections = article.sections 
     names = article.section_names
     abstract = article.summary                # List[str]
 
     # abstract -> list câu
     abstract_sents = split_sentences(abstract)
-
-    aligned = align_abstract_to_sections(sections, abstract_sents)
-
+    
     samples = []
+    idx=0
     for i, sec in enumerate(sections):
-        samples.append({
-            "article_id": article.id,
-            "section_name": names[i],
-            "section_text": sec,
-            "abstract_section": aligned[i],
-            "section_idx": i
-        })
-    return samples
+        chunks=chunk_sentences(sec)
+        for p in chunks:
+            samples.append({
+                "article_id": article.id,
+                "section_name": names[i],
+                "section_text": p,
+                "abstract_section": [],
+                "section_idx": idx
+            })
+            idx=idx+1
+    return align_abstract_to_sections(samples, abstract_sents)

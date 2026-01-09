@@ -4,3 +4,4 @@ transformers
 peft
 accelerate
 rouge-score
+sentence-transformers
