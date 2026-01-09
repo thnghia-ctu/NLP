@@ -1,7 +1,9 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
+# MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
+# Đổi sang Ministral 3B
+MODEL_NAME = "mistralai/Ministral-3B-Instruct-v0.1"
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 model = AutoModelForCausalLM.from_pretrained(
