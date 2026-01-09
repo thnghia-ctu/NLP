@@ -1,6 +1,6 @@
 import json
 from src.utils.data_utils import read_jsonl
-from src.models.mistral_baseline import summarize_article
+from src.models.mistral_baseline import summarize_section
 from src.preprocessing.data import ArticleSample, parse_item, json_to_sample, build_pts_samples
 from rouge_score import rouge_scorer
 from src.run_pts import merge_section_summaries
@@ -32,7 +32,7 @@ def main():
     # 5. Tóm tắt từng section
     pred_sections = []
     for s in pts_samples:
-        sec_summary = summarize_article(s.source)
+        sec_summary = summarize_section(s.source)
         pred_sections.append((s.section_idx, sec_summary))
 
     # 6. Gộp thành abstract toàn cục

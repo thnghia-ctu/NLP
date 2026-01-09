@@ -4,4 +4,5 @@ transformers
 peft
 accelerate
 rouge-score
+bert-score
 sentence-transformers

@@ -1,5 +1,5 @@
 from src.utils.data_utils import read_jsonl
-from src.models.mistral_baseline import summarize_article
+from src.models.mistral_baseline import summarize_section
 from src.preprocessing.data import ArticleSample, parse_item
 from rouge_score import rouge_scorer
 
@@ -8,7 +8,7 @@ scorer = rouge_scorer.RougeScorer(["rouge1", "rouge2", "rougeL"], use_stemmer=Tr
 # print(articles[0].summary[0])
 
 for i, art in enumerate(articles):
-    art.pred_summary = summarize_article(art.text)
+    art.pred_summary = summarize_section(art.text)
     scores = scorer.score(art.summary[0], art.pred_summary)
 
     print(f"\nArticle {i} | ID: {art.id}")
