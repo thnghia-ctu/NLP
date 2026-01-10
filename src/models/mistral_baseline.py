@@ -4,25 +4,32 @@ from peft import PeftModel
 
 # MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
 # Đổi sang Ministral 3B
-BASE_MODEL = "mistralai/Ministral-3B-Instruct-v0.1"
-LORA_PATH = r"experiments/checkpoints/mistral_lora_arxiv/final_adapter"
+MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
+ADAPTER_PATH = "experiments/checkpoints/mistral_lora_arxiv/final_adapter"
 
-tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL)
-base_model  = AutoModelForCausalLM.from_pretrained(
-    BASE_MODEL,
-    device_map="auto",
-    torch_dtype=torch.float16
-)
+_model = None
+_tokenizer = None
 
-model = PeftModel.from_pretrained(
-    base_model,
-    LORA_PATH,
-    torch_dtype=torch.float16
-)
+def load_model():
+    global _model, _tokenizer
 
-model.eval()
+    if _model is None:
+        _tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
-model = model.merge_and_unload()
+        base_model = AutoModelForCausalLM.from_pretrained(
+            MODEL_NAME,
+            device_map="auto",
+            torch_dtype=torch.float16
+        )
+
+        _model = PeftModel.from_pretrained(
+            base_model,
+            ADAPTER_PATH
+        )
+
+        _model.eval()
+
+    return _model, _tokenizer
 
 def summarize_section(
     section_text,
@@ -35,6 +42,8 @@ def summarize_section(
         "Focus only on key technical points.\n\n"
         f"{section_text}"
     )
+
+    model, tokenizer = load_model()
 
     inputs = tokenizer(
         prompt,
