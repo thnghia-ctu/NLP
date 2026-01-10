@@ -1,7 +1,7 @@
-# configs/config_mistral.yaml
+﻿# configs/config_mistral.yaml
 model:
   name: "mistralai/Mistral-7B-Instruct-v0.2"   # hoặc bản nhỏ hơn nếu có
-  max_length: 4096
+  max_length: 2048
   gradient_checkpointing: true
 
 lora:
@@ -12,16 +12,17 @@ lora:
 
 training:
   output_dir: "experiments/checkpoints/mistral_lora"
-  per_device_train_batch_size: 2
-  per_device_eval_batch_size: 2
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 1
   gradient_accumulation_steps: 8
   num_train_epochs: 3
-  learning_rate: 2e-4
+  learning_rate: 0.0002
   weight_decay: 0.01
   warmup_ratio: 0.03
   logging_steps: 50
   save_steps: 500
-  evaluation_strategy: "steps"
+  #evaluation_strategy: "steps"
+  do_eval: true
   eval_steps: 500
   fp16: true
   lr_scheduler_type: "cosine"

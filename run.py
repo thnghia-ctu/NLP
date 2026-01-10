@@ -22,21 +22,21 @@ def main():
     pts_samples = [json_to_sample(d) for d in pts_dicts]
 
     for pts in pts_samples:
-        if(len(pts.target)>0 ):
+        if(len(pts.target)>0 and  "the echo" in pts.source):
             print(pts.source)
             print('---------------------------------------------------------------------')
             print('---------------------------------------------------------------------')
             print(pts.target)
             break
 
-    # 5. Tóm tắt từng section
-    pred_sections = []
-    for s in pts_samples:
-        sec_summary = summarize_section(s.source)
-        pred_sections.append((s.section_idx, sec_summary))
+    # # 5. Tóm tắt từng section
+    # pred_sections = []
+    # for s in pts_samples:
+    #     sec_summary = summarize_section(s.source)
+    #     pred_sections.append((s.section_idx, sec_summary))
 
-    # 6. Gộp thành abstract toàn cục
-    first_article.pred_summary = merge_section_summaries(pred_sections)
+    # # 6. Gộp thành abstract toàn cục
+    # first_article.pred_summary = merge_section_summaries(pred_sections)
 
 if __name__ == "__main__":
     main() 

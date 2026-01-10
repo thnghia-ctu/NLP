@@ -3,7 +3,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 
 # MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
-# Đổi sang Ministral 3B
 MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
 ADAPTER_PATH = "experiments/checkpoints/mistral_lora_arxiv/final_adapter"
 
@@ -15,6 +14,7 @@ def load_model():
 
     if _model is None:
         _tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+        _tokenizer.pad_token = _tokenizer.eos_token
 
         base_model = AutoModelForCausalLM.from_pretrained(
             MODEL_NAME,
@@ -22,11 +22,13 @@ def load_model():
             torch_dtype=torch.float16
         )
 
-        _model = PeftModel.from_pretrained(
+        peft_model = PeftModel.from_pretrained(
             base_model,
             ADAPTER_PATH
         )
 
+        # 🔥 QUAN TRỌNG
+        _model = peft_model.merge_and_unload()
         _model.eval()
 
     return _model, _tokenizer
@@ -37,10 +39,9 @@ def summarize_section(
     max_new_tokens=80
 ):
     prompt = (
-        "Summarize the following SECTION of a scientific paper "
-        "in 2–3 concise sentences. "
-        "Focus only on key technical points.\n\n"
-        f"{section_text}"
+        "Summarize the following SECTION of a scientific paper " 
+        "in 2–3 concise sentences, maximum 80 words total. " 
+        "Focus only on key technical points.\n\n" f"{section_text}"
     )
 
     model, tokenizer = load_model()
@@ -76,6 +77,8 @@ def merge_section_summaries(section_summaries):
         "Write a coherent abstract combining them.\n\n"
         f"{text}"
     )
+
+    model, tokenizer = load_model()
 
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 

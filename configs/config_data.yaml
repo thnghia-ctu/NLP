@@ -1,3 +1,3 @@
 dataset:
   name: "ccdv/arxiv-summarization"   # hoặc "ccdv/pubmed-summarization"
-  subset_size: 5000                  # số lượng mẫu train
+  subset_size: all                  # số lượng mẫu train
