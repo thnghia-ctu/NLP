@@ -27,7 +27,7 @@ def load_model():
             ADAPTER_PATH
         )
 
-        # 🔥 QUAN TRỌNG
+        # QUAN TRỌNG
         _model = peft_model.merge_and_unload()
         _model.eval()
 
@@ -61,7 +61,7 @@ def summarize_section(
             pad_token_id=tokenizer.eos_token_id
         )
 
-    # ✨ CẮT PROMPT
+    #CẮT PROMPT
     gen_ids = outputs[0][inputs["input_ids"].shape[-1]:]
     summary = tokenizer.decode(gen_ids, skip_special_tokens=True)
 

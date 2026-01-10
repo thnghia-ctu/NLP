@@ -45,7 +45,7 @@ def summarize_section_t5(
     T5-based section summarization
     """
 
-    # ⚠️ T5 BẮT BUỘC có task prefix
+    #T5 BẮT BUỘC có task prefix
     input_text = (
         "summarize: "
         "Summarize the following SECTION of a scientific paper "

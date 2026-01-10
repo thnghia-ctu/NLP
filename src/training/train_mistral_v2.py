@@ -149,13 +149,13 @@ def main():
         tokenizer=tokenizer,
     )
 
-    print("🚀 Start training...")
+    print("Start training...")
     trainer.train()
 
     final_path = output_dir / "final_adapter"
     trainer.save_model(str(final_path))
     tokenizer.save_pretrained(str(final_path))
-    print(f"🎉 Done! Adapter saved at {final_path}")
+    print(f"Done! Adapter saved at {final_path}")
 
 
 if __name__ == "__main__":
