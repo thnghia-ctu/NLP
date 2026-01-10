@@ -1,16 +1,28 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import PeftModel
 
 # MODEL_NAME = "mistralai/Mistral-7B-Instruct-v0.2"
 # Đổi sang Ministral 3B
-MODEL_NAME = "mistralai/Ministral-3B-Instruct-v0.1"
+BASE_MODEL = "mistralai/Ministral-3B-Instruct-v0.1"
+LORA_PATH = r"experiments/checkpoints/mistral_lora_arxiv/final_adapter"
 
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_NAME,
+tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL)
+base_model  = AutoModelForCausalLM.from_pretrained(
+    BASE_MODEL,
     device_map="auto",
     torch_dtype=torch.float16
 )
+
+model = PeftModel.from_pretrained(
+    base_model,
+    LORA_PATH,
+    torch_dtype=torch.float16
+)
+
+model.eval()
+
+model = model.merge_and_unload()
 
 def summarize_section(
     section_text,
